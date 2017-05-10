@@ -7,9 +7,9 @@ File format is json or bjson.
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
 | `title` | *String* | `Any` | Title of Form. |
-| `sections`\* | *Array<Section>* | `Any` | An array of sections in form. |
+| `sections`\* | *Array\<Section\>* | `Any` | An array of sections in form. |
 | `locale` | *Locale* | `Any` | Language of form, like `en_US` or `fa_IR`. Also determines left-to-right or right-to-left direction **Unimplemented** |
-| `values` | *Dictionary<String, Any>* | `Any` | Data values of form. Client will ignore `values.uuid` if this value is present. |
+| `values` | *Dictionary\<String, Any\>* | `Any` | Data values of form. Client will ignore `values.uuid` if this value is present. |
 | `values.uuid` | *UUID* | `Any` | A UUID can be sent to server to get data. |
 
 ## Section Object
@@ -17,13 +17,13 @@ File format is json or bjson.
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
 | `type`\* | *String* | `static`\*, `dynamic` | Section type, see below. |
-| `items`\* | *Array<Row>* |`Any`| An array of rows. |
+| `items`\* | *Array\<Row\>* |`Any`| An array of rows. |
 | `dynamic.allowed.delete` | *Bool* | `true`, `false`\* | Allow deleting row in a Dynamic Section. |
 | `dynamic.allowed.insert` | *Bool* | `true`, `false`\* | Allow inserting new row in a dynamic section. |
 | `dynamic.allowed.reorder` | *Bool* | `true`\*, `false` | Allow reordering rows in a dynamic section. |
 | `dynamic.insert.title` | *String* | `Any` | Insert button title. |
 | `dynamic.id.prefix`\* | *String* | `default`\*, `Any` | ID's Prefix of newly created field, followed by an underscore and a UUID string. e.g. `receipt_48BE90846BEE4ED4B0923F82A8BD37F3`. Only requried when section is dynamic. |
-| `dynamic.row.*` | *Variable* | `Any` | See **Row** object description for allowed parameters. |
+| `dynamic.row` | *Row* | `Any` | See **Row** object description for allowed parameters. |
 
 Dynamic sections allow insertion, deletion and reordering rows. Suitable for multiple value inputs, like receipts.
 
@@ -40,7 +40,7 @@ Rows can have many types. Here we discuss general parameters for row struct and 
 | `id`, `tag`* | *String* | `Any` | Field ID, used when setting and retreiving values. |
 | `title` | *String* | `Any` | Title of row shown to user. |
 | `hidden` | *Bool*, *PredicateString* | `true`, `false`\*, `Any` | A literal boolean or an NSPredicate string, see below for predicate format. |
-| `disabled` | *Bool*, * PredicateString* | `true`, `false`\*, `Any` | A literal boolean or an NSPredicate string, see below for predicate format. |
+| `disabled` | *Bool*, *PredicateString* | `true`, `false`\*, `Any` | A literal boolean or an NSPredicate string, see below for predicate format. |
 | `color.background`, `color.background.ios` | *HexColorString* | `#FFFFFF` | Color of row's background. |
 | `color.text`, `color.text.ios` | *HexColorString* | `#FFFFFF` | Color of title text. |
 | `color.text.detail`, `color.text.detail.ios` | *HexColorString* | `#FFFFFF` | Color of value text. |
@@ -67,9 +67,9 @@ Row types that allow user to input data. Row types including: `textfield` and `t
 | `placeholder` | *String* | `Any` | Grayed text to user when value is empty. |
 | `color.placeholder`, `color.placeholder.ios` | *HexColorString* | `#FFFFFF` | Color of placeholder string. |
 | `empty_text` | *String* | `Any` | Text shown to user when field is empty. |
-| `formatter` | *Array<Formatter>* | `Any` | An array of **Formatter** struct. |
+| `formatter` | *Formatter* | `Any` | An array of **Formatter** struct. |
 | `required` | *Bool* | `true`, `false`\* | Either row can be empty or not. |
-| `rules` | *Array<Validation>* | `Any` | An array of **Validation** struct. |
+| `rules` | *Array\<Validation\>* | `Any` | An array of **Validation** struct. |
 | `currency.style` | *String* | `symbol`\*, `iso`, `accounting`, `plural` | Describes formatting when field type is currency,<br/>`symbol` result is `$1,000.00`.<br/>`iso` result is `1,000.00 USD`.<br/>`accounting` reuslt will be inside paranthesis when value is negative.<br/>`plural` result will be `1,000.00 US dollars` |
 | `currency.locale` | *Locale* | `Locale` | locale identifier string like `en_US` or `fa_IR`, determines currency type and formatting. Default value is determined by user device settings. |
 
@@ -96,9 +96,9 @@ Row types including: `datetime`.
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
 | `style` | *String* | `alert`, `action`, `push`\*,`segmented`, `picker`, `picker.multiple`, `picker.inline` | See below for a demonstration of each style. |
-| `title.selector` | *String* | `Any` | Title of selector form if shown. |
-| `options`\* | *Array<String>* | `Any` | An array of string which provide values to be populated with.  Values must be unique. |
-| `options.display` | *Dictionary<String, String>* | `Any` | A dictionary of string->string which provide values to be shown to user corresponding to options array. |
+| `options.title` | *String* | `Any` | Title of selector form if shown. |
+| `options`\* | *Array\<String\>* | `Any` | An array of string which provide values to be populated with.  Values must be unique. |
+| `options.display` | *Dictionary\<String, String\>* | `Any` | A dictionary of string->string which provide values to be shown to user corresponding to options array. |
 
 ### Row (custom) Object
 
@@ -107,7 +107,7 @@ There are several kind of rows to be implemented:
 - [x] `location`
 - [ ] `image`
 - [ ] `attachment`
-- [ ] `push.async`
+- [ ] `options/push.async`
 - [ ] `webview`
 
 ### Validation Object
@@ -139,17 +139,16 @@ There are several kind of rows to be implemented:
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
 | `type`\* | *String* | `submit`, `push`, `modal`, `detail`, `open_url`, `share`, `builtin` | Type of child form.<br/>`detail` can be used as sub-form. |
-| `id`\* | *String* | `Any` | In `submit` its the id of remote action.<br/>In `push`, `modal`, `detail` its the id of child form.<br/>In `builtin` it points to builtin function name. |
+| `id`\* | *String* | `Any` | In `submit` its the id of remote action.<br/>In `push`, `modal`, `detail` its the id of child form in form of POSIX hierarchy, spearated by `/`.<br/>In `builtin` it points to builtin function name. |
 | `uuid` | *UUID* | `Any` | Action UUID, can be used to distinguish user interaction on different forms. |
 | `submit.reload` | *Bool* | `true`, `false`\* | Reloading data from server after submit action sent. |
 | `submit.include.visible` | *Bool* | `true`\*, `false` | In `submit`, tells send user data to be sent to server. |
 | `submit.include.hidden` | *Bool* | `true`, `false`\* | In `submit`, tells send user data that are hidden to be sent to server. |
-| `childform` | *String* | `Any` | ID of child form in form of POSIX hierarchy, spearated by `/`. |
-| `childform.values` | *Dictionary<String, Any>* | `Any` | Data values of child form. Client will ignore `childform.values.uuid` if this value is present. |
+| `childform.values` | *Dictionary\<String, Any\>* | `Any` | Data values of child form. Client will ignore `childform.values.uuid` if this value is present. |
 | `childform.values.uuid` | *UUID* | `Any` | A UUID can be sent to server to get data. |
 | `url` | *String* | `Any` | url to be loaded when tap. |
 | `share.data` | *Base64* | `Any` | Base64 encoded data to be shared with other apps. |
-| `builtin.arguments` | *Dictionary<String, Any>* | `Any` | Arguments of builtin functions. |
+| `builtin.arguments` | *Dictionary\<String, Any\>* | `Any` | Arguments of builtin functions. |
 
 
 ## Row Demonstrate
