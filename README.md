@@ -1,4 +1,6 @@
-##Form Object
+# Dynamic Form Guide
+
+## Form Object
 
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
@@ -6,7 +8,7 @@
 | `sections`\* | *Array<Section>* | `Any` | An array of sections in form. |
 | `locale` | *Locale* | `Any` | Language of form, like `en_US` or `fa_IR`. Also determines left-to-right or right-to-left direction **Unimplemented** |
 
-##Section Object
+## Section Object
 
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
@@ -15,16 +17,16 @@
 | `dynamic.allowed.delete` | *Bool* | `true`, `false`\* | Allow deleting row in a Dynamic Section. |
 | `dynamic.allowed.insert` | *Bool* | `true`, `false`\* | Allow inserting new row in a dynamic section. |
 | `dynamic.allowed.reorder` | *Bool* | `true`\*, `false` | Allow reordering rows in a dynamic section. |
-| `dynamic.title.insert` | *String* | `Any` | Insert button title. |
+| `dynamic.insert.title` | *String* | `Any` | Insert button title. |
 | `dynamic.id.prefix`\* | *String* | \*`default`, `Any` | ID's Prefix of newly created field, followed by an underscore and a UUID string. e.g. `receipt_48BE90846BEE4ED4B0923F82A8BD37F3`. Only requried when section is dynamic. |
-| `dynamic.*` | *Variable* | `Any` | See **Row** object description for allowed parameters. |
+| `dynamic.row.*` | *Variable* | `Any` | See **Row** object description for allowed parameters. |
 
 Dynamic sections allow insertion, deletion and reordering rows. Suitable for multiple value inputs, like receipts.
 
-#####Exmaple of dynamic form
+##### Exmaple of dynamic form
 ![dynamic section](EurekaMultivalued.gif)
 
-##Row Object
+## Row Object
 
 Rows can have many types. Here we discuss general parameters for row struct and you can then see specific type of rows and their related settings.
 
