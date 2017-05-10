@@ -1,5 +1,7 @@
 # Dynamic Form Guide
 
+File format is json or bjson.
+
 ## Form Object
 
 | key | type | Values | description |
@@ -7,6 +9,8 @@
 | `title` | *String* | `Any` | Title of Form. |
 | `sections`\* | *Array<Section>* | `Any` | An array of sections in form. |
 | `locale` | *Locale* | `Any` | Language of form, like `en_US` or `fa_IR`. Also determines left-to-right or right-to-left direction **Unimplemented** |
+| `values` | *Dictionary<String, Any>* | `Any` | Data values of form. Client will ignore `values.uuid` if this value is present. |
+| `values.uuid` | *UUID* | `Any` | A UUID can be sent to server to get data. |
 
 ## Section Object
 
@@ -18,7 +22,7 @@
 | `dynamic.allowed.insert` | *Bool* | `true`, `false`\* | Allow inserting new row in a dynamic section. |
 | `dynamic.allowed.reorder` | *Bool* | `true`\*, `false` | Allow reordering rows in a dynamic section. |
 | `dynamic.insert.title` | *String* | `Any` | Insert button title. |
-| `dynamic.id.prefix`\* | *String* | \*`default`, `Any` | ID's Prefix of newly created field, followed by an underscore and a UUID string. e.g. `receipt_48BE90846BEE4ED4B0923F82A8BD37F3`. Only requried when section is dynamic. |
+| `dynamic.id.prefix`\* | *String* | `default`\*, `Any` | ID's Prefix of newly created field, followed by an underscore and a UUID string. e.g. `receipt_48BE90846BEE4ED4B0923F82A8BD37F3`. Only requried when section is dynamic. |
 | `dynamic.row.*` | *Variable* | `Any` | See **Row** object description for allowed parameters. |
 
 Dynamic sections allow insertion, deletion and reordering rows. Suitable for multiple value inputs, like receipts.
@@ -51,7 +55,7 @@ Row types that allow user to input data. Row types including: `label`, `button`,
 | `value.maximum` | *Int, Float* | `Any`, `10`\* | Maximum allowed value for ranged controls like slider or stepper. |
 | `value.stepper.steps` | *Unsigned Int* | `Any`, `1`\* | Value added or decreased after tapping on stepper buttons. |
 | `value.stepper.type` | *String* | `integer`, `float`\* | **Stepper row** Should show decimal fraction in value or not. Returned value will be always float. |
-| `button.pushtype` | *Bool* | `true`, `false`\* | Detemines either show regular button or arrow accessory button |
+| `button.action` | *Action* | `Any` | **(Unimplemented)** Detemines either show regular button or arrow accessory button. |
 
 ### Row (Field) Object
 
@@ -99,11 +103,11 @@ Row types including: `datetime`.
 
 There are several kind of rows to be implemented:
 
-`location`,
-`image`,
-`attachment`,
-`push.async`,
-`webview`
+- [x] `location`
+- [ ] `image`
+- [ ] `attachment`
+- [ ] `push.async`
+- [ ] `webview`
 
 ### Validation Object
 
@@ -129,8 +133,25 @@ There are several kind of rows to be implemented:
 | `date.timezone` | *String* | `Any` | Timezone of date, like `Asia/Tehran`, see [this guide](http://www.unicode.org/cldr/charts/29/supplemental/zone_tzid.html). |
 | `date.locale` | *Locale* | `Locale` | locale identifier string like `en_US` or `fa_IR`, determines date formatting. Default value is determined by user device settings. |
 
-##Row Demonstrate
+### Action Object
 
+| key | type | Values | description |
+|:---|:---:|:---:|:---|
+| `type`\* | *String* | `submit`, `push`, `modal`, `detail`, `open_url`, `share`, `builtin` | Type of child form.<br/>`detail` can be used as sub-form. |
+| `id`\* | *String* | `Any` | In `submit` its the id of remote action.<br/>In `push`, `modal`, `detail` its the id of child form.<br/>In `builtin` it points to builtin function name. |
+| `uuid` | *UUID* | `Any` | Action UUID, can be used to distinguish user interaction on different forms. |
+| `submit.reload` | *Bool* | `true`, `false`\* | Reloading data from server after submit action sent. |
+| `submit.include.visible` | *Bool* | `true`\*, `false` | In `submit`, tells send user data to be sent to server. |
+| `submit.include.hidden` | *Bool* | `true`, `false`\* | In `submit`, tells send user data that are hidden to be sent to server. |
+| `childform` | *String* | `Any` | ID of child form in form of POSIX hierarchy, spearated by `/`. |
+| `childform.values` | *Dictionary<String, Any>* | `Any` | Data values of child form. Client will ignore `childform.values.uuid` if this value is present. |
+| `childform.values.uuid` | *UUID* | `Any` | A UUID can be sent to server to get data. |
+| `url` | *String* | `Any` | url to be loaded when tap. |
+| `share.data` | *Base64* | `Any` | Base64 encoded data to be shared with other apps. |
+| `builtin.arguments` | *Dictionary<String, Any>* | `Any` | Arguments of builtin functions. |
+
+
+## Row Demonstrate
 
 ##### Alert
 ![Alert row](AlertRow.jpeg)
