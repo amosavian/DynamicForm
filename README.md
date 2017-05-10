@@ -59,10 +59,11 @@ Row types that allow user to input data. Row types including: `label`, `button`,
 
 ### Row (Field) Object
 
-Row types that allow user to input data. Row types including: `text`, `textarea`, `name`, `password`, `email`, `twitter`, `account`, `zipcode`, `integer`, `decimal`, `percent`, `currency`, `url`, `phone`.
+Row types that allow user to input data. Row types including: `textfield` and `textarea`.
 
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
+| `style` | *String* | `text`\*, `name`, `password`, `email`, `twitter`, `account`, `zipcode`, `integer`, `decimal`, `percent`, `currency`, `url`, `phone` | Usable when type is `textfield`. Determines entry data type. Affects keyboard shown to user and validation. |
 | `placeholder` | *String* | `Any` | Grayed text to user when value is empty. |
 | `color.placeholder`, `color.placeholder.ios` | *HexColorString* | `#FFFFFF` | Color of placeholder string. |
 | `empty_text` | *String* | `Any` | Text shown to user when field is empty. |
