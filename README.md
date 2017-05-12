@@ -9,8 +9,10 @@ File format is json or bjson.
 | `title` | *String* | `Any` | Title of Form. |
 | `sections`\* | *Array\<Section\>* | `Any` | An array of sections in form. |
 | `locale` | *Locale* | `Any` | Language of form, like `en_US` or `fa_IR`. Also determines left-to-right or right-to-left direction **Unimplemented** |
-| `values` | *Dictionary\<String, Any\>* | `Any` | Data values of form. Client will ignore `values.uuid` if this value is present. |
-| `values.uuid` | *UUID* | `Any` | A UUID can be sent to server to get data. |
+| `dismiss.submit` | *Bool* | `true`, `false`\* | Submitting values when dismissing view. |
+| `dismiss.submit.include.visible` | *Bool* | `true`\*, `false` | In `submit`, tells send user data to be sent to server. |
+| `dismiss.submit.include.hidden` | *Bool* | `true`, `false`\* | In `submit`, tells send user data that are hidden to be sent to server. |
+| `style.css` | *String* | `Any` | URL of css styling file for web view. |
 
 ## Section Object
 
@@ -49,17 +51,21 @@ Rows can have many types. Here we discuss general parameters for row struct and 
 
 Row types that allow user to input data. Row types including: `label`, `button`, `check`, `switch`, `slider`, `stepper`.
 
+Value type for `check` and `switch` are `boolean`, for `slider` and `stepper` are `float`.
+
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
 | `value.minimum` | *Int, Float* | `Any`, `0`\* | Minimum allowed value for ranged controls like slider or stepper. |
 | `value.maximum` | *Int, Float* | `Any`, `10`\* | Maximum allowed value for ranged controls like slider or stepper. |
 | `value.stepper.steps` | *Unsigned Int* | `Any`, `1`\* | Value added or decreased after tapping on stepper buttons. |
 | `value.stepper.type` | *String* | `integer`, `float`\* | **Stepper row** Should show decimal fraction in value or not. Returned value will be always float. |
-| `button.action` | *Action* | `Any` | **(Unimplemented)** Detemines either show regular button or arrow accessory button. |
+| `action` | *Action* | `Any` | **(Unimplemented)** Detemines action done when tapping row. |
 
 ### Row (Field) Object
 
 Row types that allow user to input data. Row types including: `textfield` and `textarea`.
+
+Value type is conformed to style and can be either `int` or `float` or `string`.
 
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
@@ -79,6 +85,8 @@ Row types that allow user to input data. Row types including: `textfield` and `t
 
 Row types including: `datetime`.
 
+Value type is Microsoft JSON format which is `"/Date(number)"` and number is POSIX time * 1000 (miliseconds passed from epoch Jan 1, 1970).
+
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
 | `style` | *String* | `date`, `time`, `datetime`\*, `countdown` | Determines date component to be selected by user. |
@@ -91,26 +99,61 @@ Row types including: `datetime`.
 | `date.timezone` | *String* | `Any` | Timezone of date, like `Asia/Tehran`. Default value is determined by user device settings. see [this guide](http://www.unicode.org/cldr/charts/29/supplemental/zone_tzid.html). |
 | `date.locale` | *Locale* | `Locale` | locale identifier string like `en_US` or `fa_IR`, determines date formatting. Default value is determined by user device settings. |
 
-### Row (options) Object
+### Row (Options) Object
+
+Row types including: `options`.
+
+Value type is `string` or an array of `string` for multi-select styles.
 
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
-| `style` | *String* | `alert`, `action`, `push`\*,`segmented`, `picker`, `picker.multiple`, `picker.inline` | See below for a demonstration of each style. |
+| `style` | *String* | `alert`, `action`, `push`\*,`segmented`, `picker`, `picker.multiple`, `picker.inline`, `suggestion`, `token` | See below for a demonstration of each style. |
+| `style.accessory` | *Bool* | `false`\*, `true` | For `suggestion` and `token` styles, determine how options presents. |
 | `options.title` | *String* | `Any` | Title of selector form if shown. |
 | `options`\* | *Array\<String\>* | `Any` | An array of string which provide values to be populated with.  Values must be unique. |
+| `options.queryurl`\*\* | *URLString* | `Any` | **Only for `suggestion` and `token` styles** An url which allows fetch options dynamically via url. `%s` represent query-encoded search query and `%max` represents number of maximum results. Results are embeded in JSON object in `results` key. |
 | `options.display` | *Dictionary\<String, String\>* | `Any` | A dictionary of string->string which provide values to be shown to user corresponding to options array. |
 
-### Row (custom) Object
+### Row (Location) Object
+
+Row types including: `location`.
+
+Value type is a dictionary consists of `lat` for latitude, `long` for longitude, `alt` for altitude and optionally `date`.
+
+### Row (Postal Address) Object
+
+Row types including: `postaladdress`.
+
+Value type is a dictionary consists of optional `street`, `state`, `postalCode`, `city`, `country`.
+
+### Row (HTML) Object
+
+Row types including: `html`.
+
+Value type is a `string` consists of html string.
+
+| key | type | Values | description |
+|:---|:---:|:---:|:---|
+| `editable` | *Bool* | `false`, `true`\* | Determines either user can edit contents or can only view. |
+
+### Row (Expression) Object
+
+Row types including: `expression`.
+
+Value type is variable.
+
+| key | type | Values | description |
+|:---|:---:|:---:|:---|
+| `expression` | *ExpressionString* | `Any` | Similiar to Predicate string, but supports of arithmetic and aggregative operations. |
+
+### Row (unimplemented) Object
 
 There are several kind of rows to be implemented:
 
-- [x] `location`
 - [ ] `image`
 - [ ] `attachment`
-- [ ] `options/push.async`
-- [ ] `webview`
 
-### Validation Object
+## Validation Object
 
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
@@ -118,7 +161,7 @@ There are several kind of rows to be implemented:
 | `regexp` | *String* | `Any` | Regular expression to validate value. Either this field or `predicate` must be set. |
 | `predicate ` | *PredicateString* | `Any` | Regular expression to validate value. Either this field or `regexp ` must be set.<br/>Predicate should be evaluated against `SELF`. e.g. `SELF < 10` or `SELF BEGINSWITH[c] 'hello'` |
 
-### Formatter Object
+## Formatter Object
 
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
@@ -134,7 +177,7 @@ There are several kind of rows to be implemented:
 | `date.timezone` | *String* | `Any` | Timezone of date, like `Asia/Tehran`, see [this guide](http://www.unicode.org/cldr/charts/29/supplemental/zone_tzid.html). |
 | `date.locale` | *Locale* | `Locale` | locale identifier string like `en_US` or `fa_IR`, determines date formatting. Default value is determined by user device settings. |
 
-### Action Object
+## Action Object
 
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
@@ -144,8 +187,6 @@ There are several kind of rows to be implemented:
 | `submit.reload` | *Bool* | `true`, `false`\* | Reloading data from server after submit action sent. |
 | `submit.include.visible` | *Bool* | `true`\*, `false` | In `submit`, tells send user data to be sent to server. |
 | `submit.include.hidden` | *Bool* | `true`, `false`\* | In `submit`, tells send user data that are hidden to be sent to server. |
-| `childform.values` | *Dictionary\<String, Any\>* | `Any` | Data values of child form. Client will ignore `childform.values.uuid` if this value is present. |
-| `childform.values.uuid` | *UUID* | `Any` | A UUID can be sent to server to get data. |
 | `url` | *String* | `Any` | url to be loaded when tap. |
 | `share.data` | *Base64* | `Any` | Base64 encoded data to be shared with other apps. |
 | `builtin.arguments` | *Dictionary\<String, Any\>* | `Any` | Arguments of builtin functions. |
