@@ -20,6 +20,7 @@ File format is json or bjson.
 |:---|:---:|:---:|:---|
 | `type`\* | *String* | `static`\*, `dynamic` | Section type, see below. |
 | `items`\* | *Array\<Row\>* |`Any`| An array of rows. |
+| `class` | *String* | `Any` | Class attribute in html output for CSS styling. Default is `"sectionObject." + type` if not set. |
 | `dynamic.allowed.delete` | *Bool* | `true`, `false`\* | Allow deleting row in a Dynamic Section. |
 | `dynamic.allowed.insert` | *Bool* | `true`, `false`\* | Allow inserting new row in a dynamic section. |
 | `dynamic.allowed.reorder` | *Bool* | `true`\*, `false` | Allow reordering rows in a dynamic section. |
@@ -43,6 +44,7 @@ Rows can have many types. Here we discuss general parameters for row struct and 
 | `title` | *String* | `Any` | Title of row shown to user. |
 | `hidden` | *Bool*, *PredicateString* | `true`, `false`\*, `Any` | A literal boolean or an NSPredicate string, see below for predicate format. |
 | `disabled` | *Bool*, *PredicateString* | `true`, `false`\*, `Any` | A literal boolean or an NSPredicate string, see below for predicate format. |
+| `class` | *String* | `Any` | Class attribute in html output for CSS styling. Default is `"rowObject." + type` if not set. |
 | `color.background`, `color.background.ios` | *HexColorString* | `#FFFFFF` | Color of row's background. |
 | `color.text`, `color.text.ios` | *HexColorString* | `#FFFFFF` | Color of title text. |
 | `color.text.detail`, `color.text.detail.ios` | *HexColorString* | `#FFFFFF` | Color of value text. |
@@ -183,7 +185,6 @@ There are several kind of rows to be implemented:
 |:---|:---:|:---:|:---|
 | `type`\* | *String* | `submit`, `push`, `modal`, `detail`, `open_url`, `share`, `builtin` | Type of child form.<br/>`detail` can be used as sub-form. |
 | `id`\* | *String* | `Any` | In `submit` its the id of remote action.<br/>In `push`, `modal`, `detail` its the id of child form in form of POSIX hierarchy, spearated by `/`.<br/>In `builtin` it points to builtin function name. |
-| `uuid` | *UUID* | `Any` | Action UUID, can be used to distinguish user interaction on different forms. |
 | `submit.reload` | *Bool* | `true`, `false`\* | Reloading data from server after submit action sent. |
 | `submit.include.visible` | *Bool* | `true`\*, `false` | In `submit`, tells send user data to be sent to server. |
 | `submit.include.hidden` | *Bool* | `true`, `false`\* | In `submit`, tells send user data that are hidden to be sent to server. |
