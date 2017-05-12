@@ -9,9 +9,9 @@ File format is json or bjson.
 | `title` | *String* | `Any` | Title of Form. |
 | `sections`\* | *Array\<Section\>* | `Any` | An array of sections in form. |
 | `locale` | *Locale* | `Any` | Language of form, like `en_US` or `fa_IR`. Also determines left-to-right or right-to-left direction **Unimplemented** |
-| `dismiss.submit` | *Bool* | `true`, `false`\* | Submitting values when dismissing view. |
-| `dismiss.submit.include.visible` | *Bool* | `true`\*, `false` | In `submit`, tells send user data to be sent to server. |
-| `dismiss.submit.include.hidden` | *Bool* | `true`, `false`\* | In `submit`, tells send user data that are hidden to be sent to server. |
+| `onchange.submit` | *Bool* | `true`, `false`\* | Submitting values when changing values. |
+| `onchange.submit.include.visible` | *Bool* | `true`\*, `false` | In `onchange.submit`, tells send user data to be sent to server. |
+| `onchange.submit.include.hidden` | *Bool* | `true`, `false`\* | In `onchange.submit`, tells send user data that are hidden to be sent to server. |
 | `style.css` | *String* | `Any` | URL of css styling file for web view. |
 
 ## Section Object
