@@ -51,6 +51,8 @@ Rows can have many types. Here we discuss general parameters for row struct and 
 
 ### Row (Controls) Object
 
+Rows which are simply embed controls such as label or check box.
+
 Row types that allow user to input data. Row types including: `label`, `button`, `check`, `switch`, `slider`, `stepper`.
 
 Value type for `check` and `switch` are `boolean`, for `slider` and `stepper` are `float`.
@@ -64,6 +66,8 @@ Value type for `check` and `switch` are `boolean`, for `slider` and `stepper` ar
 | `action` | *Action* | `Any` | **(Unimplemented)** Detemines action done when tapping row. |
 
 ### Row (Field) Object
+
+Rows which allow user to input data.
 
 Row types that allow user to input data. Row types including: `textfield` and `textarea`.
 
@@ -85,6 +89,8 @@ Value type is conformed to style and can be either `int` or `float` or `string`.
 
 ### Row (Date and Time) Object
 
+Rows which allows user to input date or/and time.
+
 Row types including: `datetime`.
 
 Value type is Microsoft JSON format which is `"/Date(number)"` and number is POSIX time * 1000 (miliseconds passed from epoch Jan 1, 1970).
@@ -103,6 +109,8 @@ Value type is Microsoft JSON format which is `"/Date(number)"` and number is POS
 
 ### Row (Options) Object
 
+Rows which. allow user to select one or more item from several options.
+
 Row types including: `options`.
 
 Value type is `string` or an array of `string` for multi-select styles.
@@ -118,17 +126,23 @@ Value type is `string` or an array of `string` for multi-select styles.
 
 ### Row (Location) Object
 
+Row which allows user to select/view a location on map.
+
 Row types including: `location`.
 
 Value type is a dictionary consists of `lat` for latitude, `long` for longitude, `alt` for altitude and optionally `date`.
 
 ### Row (Postal Address) Object
 
+Rows which allow user to input an address to a location.
+
 Row types including: `postaladdress`.
 
 Value type is a dictionary consists of optional `street`, `state`, `postalCode`, `city`, `country`.
 
 ### Row (HTML) Object
+
+Rows which show user a rich text.
 
 Row types including: `html`.
 
@@ -140,6 +154,8 @@ Value type is a `string` consists of html string.
 
 ### Row (Expression) Object
 
+A dynamic field that is updated by value of other fields and can be used to have an aggregation label.
+
 Row types including: `expression`.
 
 Value type is variable.
@@ -147,6 +163,18 @@ Value type is variable.
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
 | `expression` | *ExpressionString* | `Any` | Similiar to Predicate string, but supports of arithmetic and aggregative operations. |
+
+### Row (Expression Query) Object
+
+Sends a query to specified url then uses returned json result in the value of `result` key to populate row value (AJAX). Request is sent every time user changes value of specified rows. the query is a json dictionary. values id is determinable as `__id` key.
+
+Row types including: `expression.query`.
+
+| key | type | Values | description |
+|:---|:---:|:---:|:---|
+| `url` | *String* | `Any` | An url which allows fetch result dynamically. |
+| `rows` | *Array\<String\>* | `Any` | An array populated with id of rows necessary to have a result. |
+| `predefinations` | *Dictionary\<String\, Any\>* | `Any` | A dictionary which is sent untouched every time to server. |
 
 ### Row (unimplemented) Object
 
