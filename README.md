@@ -9,7 +9,7 @@ File format is json or bjson.
 | `title` | *String* | `Any` | Title of Form. |
 | `sections`\* | *Array\<Section\>* | `Any` | An array of sections in form. |
 | `locale` | *Locale* | `Any` | Language of form, like `en_US` or `fa_IR`. Also determines left-to-right or right-to-left direction **Unimplemented** |
-| `onchange.submit` | *Bool* | `true`, `false`\* | Submitting values when changing values. |
+| `onchange` | *String* | `submit`, `nothing`\* | Either submitting values when changing values or not. |
 | `onchange.submit.include.visible` | *Bool* | `true`\*, `false` | In `onchange.submit`, tells send user data to be sent to server. |
 | `onchange.submit.include.hidden` | *Bool* | `true`, `false`\* | In `onchange.submit`, tells send user data that are hidden to be sent to server. |
 | `style.css` | *String* | `Any` | URL of css styling file for web view. |
@@ -164,11 +164,11 @@ Value type is variable.
 |:---|:---:|:---:|:---|
 | `expression` | *ExpressionString* | `Any` | Similiar to Predicate string, but supports of arithmetic and aggregative operations. |
 
-### Row (Expression Query) Object
+### Row (Query) Object
 
 Sends a query to specified url then uses returned json result in the value of `result` key to populate row value (AJAX). Request is sent every time user changes value of specified rows. the query is a json dictionary. values id is determinable as `__id` key.
 
-Row types including: `expression.query`.
+Row types including: `query`.
 
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
