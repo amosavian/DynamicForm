@@ -19,6 +19,8 @@ File format is json or bjson.
 | key | type | Values | description |
 |:---|:---:|:---:|:---|
 | `type`\* | *String* | `static`\*, `dynamic` | Section type, see below. |
+| `header`, `title` | *String* | `Any` | Section header title. |
+| `footer` | *String* | `Any` | Section footer text. |
 | `items`\* | *Array\<Row\>* |`Any`| An array of rows. |
 | `class` | *String* | `Any` | Class attribute in html output for CSS styling. Default is `"sectionObject." + type` if not set. |
 | `dynamic.allowed.delete` | *Bool* | `true`, `false`\* | Allow deleting row in a Dynamic Section. |
